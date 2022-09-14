@@ -1,22 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Hello World</title>
-    <url>/other/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="quick-start">Quick Start</h2>
-<h3 id="create-a-new-post">Create a new post</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="run-server">Run server</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="generate-static-files">Generate static files</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="deploy-to-remote-sites">Deploy to remote sites</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+    <title>无U盘安装Ubuntu双系统</title>
+    <url>/Linux/%E6%97%A0U%E7%9B%98%E5%AE%89%E8%A3%85Ubuntu%E5%8F%8C%E7%B3%BB%E7%BB%9F/</url>
+    <content><![CDATA[<p>之前一直想要装一个<code>Ubuntu</code>的双系统，奈何没有U盘，于是就有了这次实践，也有了这篇博客来记录。</p>
+<span id="more"></span>
+<h2 id="需要的材料">需要的材料</h2>
+<ol type="1">
+<li>一台电脑（请确保有空余磁盘空间）</li>
+<li>ubuntu-18.04-desktop-amd64.iso（<code>Ubuntu</code>的镜像，当然别的版本也可以）</li>
+<li><code>EasyBCD</code></li>
+<li>可能会用到<code>DiskGenius</code></li>
+</ol>
+<h2 id="操作步骤">操作步骤</h2>
+<h3 id="准备镜像文件">准备镜像文件</h3>
+<p>把系统镜像放到一个硬盘的<strong>根目录</strong>下（这个硬盘不是最终的安装位置！），我放在了<code>C</code>盘</p>
+<p>然后打开这个镜像（比如用WinRAR之类的解压缩软件），找到<code>vmlinuz.efi</code>和<code>initrd.lz</code>同样放到根目录下</p>
+<p>打开<code>EasyBCD</code>，选择添加新条目，选<code>NeoGrub</code>，安装，之后点配置</p>
+<figure>
+<img src="https://xhfs0.ztytech.com/CA107011/727b0dd4b284444b95308bb4b40a9858.file" alt="NeoGrub 配置" /><figcaption aria-hidden="true">NeoGrub 配置</figcaption>
+</figure>
+<h3 id="修改配置文件">修改配置文件</h3>
+<p>配置文件大致如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">title Install Ubuntu</span><br><span class="line">root (hd0,0)</span><br><span class="line">kernel (hd0,0)/vmlinuz.efi boot=casper iso-scan/filename=/ubuntu-18.04-desktop-amd64.iso ro quiet splash locale=zh_CN.UTF-8 </span><br><span class="line">initrd (hd0,0)/initrd.lz</span><br></pre></td></tr></table></figure>
+<p>下面来一行一行解释这些东西：</p>
+<p><code>title Install Ubuntu</code> 就是待会儿安装界面上显示的选项的名称，<code>title</code>后内容随意</p>
+<p><code>root (hd0,0)</code>就是先指定一下那个<code>linux</code>的<code>iso</code>文件放在哪里</p>
+<p>雷区来了！关于<code>(hd0,0)</code>到底是什么：</p>
+<p>先放一张图：</p>
+<figure>
+<img src="https://xhfs5.ztytech.com/CA107011/adbfec86f916460aa297fa7835552b36.file" alt="磁盘管理显示的磁盘分区" /><figcaption aria-hidden="true"><code>磁盘管理</code>显示的磁盘分区</figcaption>
+</figure>
+<p>这张图中的C盘就是<code>(hd0,0)</code>，D盘是<code>hd(0,1)</code>，后面的一个<code>66.76G</code>的是我装<code>Ubuntu</code>的位置，<code>(hd0,2)</code></p>
+<p>依次类推，F盘就是<code>(hd1,1)</code></p>
+<p><code>kernel</code>和<code>initrd</code>两行就是指定内核和<code>vmlinuz.efi</code>、<code>initrd.lz</code>这两个文件的位置，不作解释</p>
+<p>这里填的<code>(hd0,0)</code>只是告诉<code>NeoGrub</code>镜像的位置，并不是最终安装的位置！</p>
+<p>填好了配置文件之后保存关闭即可</p>
+<p>然后就需要给<code>Ubuntu</code>的安装腾空间了，比如说我是把D盘压缩卷，然后压缩出来的空间删除即可，变成“未分配”即可</p>
+<h3 id="修改磁盘分区为主分区">修改磁盘分区为主分区</h3>
+<p>雷区2：如果这样操作后未分配区域是被绿色线包住的（即扩展分区），需要用<code>DiskGenius</code>转换为主分区，然后保存退出</p>
+<figure>
+<img src="https://xhfs3.ztytech.com/CA107011/c4029bac7630408ea41e69a9130c0a01.file" alt="DiskGenius 修改为主分区" /><figcaption aria-hidden="true">DiskGenius 修改为主分区</figcaption>
+</figure>
+<h3 id="引导进入-neogrub">引导进入 NeoGrub</h3>
+<p>重启，开机的时候选择<code>NeoGrub</code>：</p>
+<figure>
+<img src="https://xhfs2.ztytech.com/CA107011/682c14c08b294819bfc1ee48baa3e230.file" alt="开机引导界面" /><figcaption aria-hidden="true">开机引导界面</figcaption>
+</figure>
+<h3 id="安装系统">安装系统</h3>
+<p>进入Ubuntu后，<code>Ctrl + Alt + T</code>调出终端，执行<code>sudo umount -l /isodevice</code>（注意！这很重要！跳过这步就会一直一直安装装不完）</p>
+<p>打开桌面的安装程序</p>
+<p>选择其他，如果你不想使用<code>Ubuntu</code>的引导作为主引导的话</p>
+<figure>
+<img src="https://xhfs5.ztytech.com/CA107011/6faaa5c6cdec486ab690c8cbd070b554.file" alt="选择多系统共存" /><figcaption aria-hidden="true">选择多系统共存</figcaption>
+</figure>
+<p>创建一个分区</p>
+<figure>
+<img src="https://xhfs0.ztytech.com/CA107011/92ad12611a564e95a8413dd11736979d.file" alt="创建一个分区" /><figcaption aria-hidden="true">创建一个分区</figcaption>
+</figure>
+<p>选<code>Ext4</code>，挂载点选<code>/</code></p>
+<figure>
+<img src="https://xhfs5.ztytech.com/CA107011/f8841a61120c4299a8c731f1953bff4f.file" alt="选择挂载点" /><figcaption aria-hidden="true">选择挂载点</figcaption>
+</figure>
+<p>如果不想使用<code>Ubuntu</code>的<code>Grub</code>引导作为主引导的话，在最下面选择把启动引导器安装在你刚刚建出来的分区</p>
+<figure>
+<img src="https://xhfs4.ztytech.com/CA107011/ad8e3435d96c45f985e0ad9e7d178a8e.file" alt="安装启动引导" /><figcaption aria-hidden="true">安装启动引导</figcaption>
+</figure>
+<p>最后就是一些无脑安装和设置了，配置完后关机，再开机的时候你就会发现：</p>
+<figure>
+<img src="https://xhfs2.ztytech.com/CA107011/682c14c08b294819bfc1ee48baa3e230.file" alt="引导界面没有Ubuntu？" /><figcaption aria-hidden="true">引导界面没有Ubuntu？</figcaption>
+</figure>
+<p>没有<code>Ubuntu</code>的引导！（这很正常，因为还没有编辑过引导）</p>
+<h3 id="编辑引导菜单">编辑引导菜单</h3>
+<p>进入<code>Windows</code>，还是<code>EasyBCD</code>，选择编辑引导菜单，如图操作</p>
+<figure>
+<img src="https://xhfs4.ztytech.com/CA107011/7a57de8401aa4b1bbf65792bac0096cb.file" alt="添加一个 Ubuntu 的条目" /><figcaption aria-hidden="true">添加一个 Ubuntu 的条目</figcaption>
+</figure>
+<figure>
+<img src="https://xhfs0.ztytech.com/CA107011/7472fc19087348ea8bb6d570ade1cc56.file" alt="删除 NeoGrub 引导" /><figcaption aria-hidden="true">删除 NeoGrub 引导</figcaption>
+</figure>
+<p>保存，再重启就有<code>Ubuntu</code>的选项啦，打开后就可以进入<code>Ubuntu</code>的引导了</p>
+<figure>
+<img src="https://xhfs2.ztytech.com/CA107011/8e2bcd65948a4830985ead6432ab4f2b.file" alt="成功！" /><figcaption aria-hidden="true">成功！</figcaption>
+</figure>
 ]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>双系统</tag>
+        <tag>Ubuntu</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>第一篇博客</title>
+    <url>/%E7%9E%8E%E6%90%9E%E9%BC%93%E7%9A%84%E4%B8%9C%E8%A5%BF/%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/</url>
+    <content><![CDATA[<p>博客反反复复修修改改搞鼓了已经不下五六个了，这次终于找到了一个相当强大而且好看的样式，在台风天改了一整天把它调教好了，预计会在之后相当长的一段时间就用这个平台了。</p>
+<span id="more"></span>
+<p>后面的几篇日期是今天的博客就是从之前的平台上迁移过来的了没错。</p>
+<p>挂一下之前的几个还没删的博客的链接（随时可能删掉）</p>
+<p>初中时用<code>Jekyll</code>搭的：<span class="exturl" data-url="aHR0cHM6Ly96aHVjaGVuZ3lhbmcwMjA3LmdpdGh1Yi5pbw==">传送门<i class="fa fa-external-link-alt"></i></span></p>
+<p>高二时用<code>Hexo</code>搭的：<span class="exturl" data-url="aHR0cHM6Ly96aHVjaGVuZ3lhbmcuZ2l0ZWUuaW8=">传送门<i class="fa fa-external-link-alt"></i></span></p>
+<p>（先搬其它文章去了，有空回来补）</p>
+]]></content>
+      <categories>
+        <category>瞎搞鼓的东西</category>
+      </categories>
+      <tags>
+        <tag>博客</tag>
+        <tag>日常</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>镇海中学赋</title>
+    <url>/%E9%AB%98%E4%B8%AD%E7%94%9F%E6%B4%BB/%E9%95%87%E6%B5%B7%E4%B8%AD%E5%AD%A6%E8%B5%8B/</url>
+    <content><![CDATA[<p>【前记：不是官方版本，由Simpson从官方版本修改而来】</p>
+<p>浩浩东海，湛湛甬江，大成圣地，文运恒昌。</p>
+<p>千古凤雏留地，百年卧龙源乡。</p>
+<span id="more"></span>
+<p>梓荫雄镇，学府扬风云万里；华诞幸逢，鳞鲲绕日月霞光。</p>
+<p>岁次辛亥，民国肇基，外弱内贫，百废待兴。</p>
+<p>仁者远虑，筹资办学；乡贤卓识，革新扬旌。</p>
+<p>大辂椎轮，功不可泯，筚路蓝褛，玉汝于成。</p>
+<p>位重跃顶，竞傲尘世；才高显势，终跻群英。</p>
+<p>腾蛟九州华川，崛于无名陇亩；扬剑四海龙桥，崭出不尽寰中。</p>
+<p>福被一地，暗香益远；道传四方，羽翼渐丰。</p>
+<p>校园菁菁，人文氤氲。</p>
+<p>泮池桥边，裕谦舍身存浩气；流芳碑上，卢镗遗墨传芳芬。</p>
+<p>金戈引尘，俞大猷誓卫故国；铁马扬雪，林则徐志驱迷烟。</p>
+<p>朱子弦歌绵绵，吴公铁骨铮铮。</p>
+<p>柔石亭前，二月春萌；朱枫楼外，三秋星隐。</p>
+<p>困斋亭电波不逝，新红廊浮雕方成。</p>
+<p>繁花掩下，寸土传思报中华；盛柏立中，残台铸进江复兴。</p>
+<p>翠竹芊芊，树明德新民之帜；流水依依，传至善仁者之情。</p>
+<p>阁底英烈伴读，殿旁书声琅清。</p>
+<p>度尺教台，诲人润物，传道解惑；径年木桌，励志进取，勤奋健美。</p>
+<p>修身为家国，奋鬣展鹏程。</p>
+<p>大潮涌，万物竞。标帜立，风骚领。</p>
+<p>百十载过，共襄大业；千万路展，齐荣称幸。</p>
+<p>浸染求同，同筑高台；宽宏存异，异放绚晕。</p>
+<p>术艺并济，小城年岁塑才子；文武并举，大鹏行旅载书生。</p>
+<p>潮头巍立，斜阳流影，领航东南，长空可擎。</p>
+<p>壮哉，我镇海中学！鸿鹄振翼，挟天风而高升；骐骥奋蹄，濒江海以奔腾。</p>
+<p>壮哉，我镇海中学！蓝海扬波，振拔千秋凌运；红日喷薄，辉耀万古昌盛！</p>
+]]></content>
+      <categories>
+        <category>高中生活</category>
+      </categories>
+      <tags>
+        <tag>日常</tag>
+      </tags>
   </entry>
 </search>

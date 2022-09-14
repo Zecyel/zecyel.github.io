@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="baidu-site-verification" content="code-Du5IuRh00H">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zecyel.gitee.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.13.0","exturl":true,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":-1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="之前一直想要装一个Ubuntu的双系统，奈何没有U盘，于是就有了这次实践，也有了这篇博客来记录。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="无U盘安装Ubuntu双系统">
+<meta property="og:url" content="https://zecyel.gitee.io/Linux/%E6%97%A0U%E7%9B%98%E5%AE%89%E8%A3%85Ubuntu%E5%8F%8C%E7%B3%BB%E7%BB%9F/index.html">
+<meta property="og:site_name" content="Active">
+<meta property="og:description" content="之前一直想要装一个Ubuntu的双系统，奈何没有U盘，于是就有了这次实践，也有了这篇博客来记录。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://xhfs0.ztytech.com/CA107011/727b0dd4b284444b95308bb4b40a9858.file">
+<meta property="og:image" content="https://xhfs5.ztytech.com/CA107011/adbfec86f916460aa297fa7835552b36.file">
+<meta property="og:image" content="https://xhfs3.ztytech.com/CA107011/c4029bac7630408ea41e69a9130c0a01.file">
+<meta property="og:image" content="https://xhfs2.ztytech.com/CA107011/682c14c08b294819bfc1ee48baa3e230.file">
+<meta property="og:image" content="https://xhfs5.ztytech.com/CA107011/6faaa5c6cdec486ab690c8cbd070b554.file">
+<meta property="og:image" content="https://xhfs0.ztytech.com/CA107011/92ad12611a564e95a8413dd11736979d.file">
+<meta property="og:image" content="https://xhfs5.ztytech.com/CA107011/f8841a61120c4299a8c731f1953bff4f.file">
+<meta property="og:image" content="https://xhfs4.ztytech.com/CA107011/ad8e3435d96c45f985e0ad9e7d178a8e.file">
+<meta property="og:image" content="https://xhfs2.ztytech.com/CA107011/682c14c08b294819bfc1ee48baa3e230.file">
+<meta property="og:image" content="https://xhfs4.ztytech.com/CA107011/7a57de8401aa4b1bbf65792bac0096cb.file">
+<meta property="og:image" content="https://xhfs0.ztytech.com/CA107011/7472fc19087348ea8bb6d570ade1cc56.file">
+<meta property="og:image" content="https://xhfs2.ztytech.com/CA107011/8e2bcd65948a4830985ead6432ab4f2b.file">
+<meta property="article:published_time" content="2022-09-14T12:32:20.000Z">
+<meta property="article:modified_time" content="2022-09-14T12:58:29.945Z">
+<meta property="article:author" content="Zecyel">
+<meta property="article:tag" content="双系统">
+<meta property="article:tag" content="Ubuntu">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://xhfs0.ztytech.com/CA107011/727b0dd4b284444b95308bb4b40a9858.file">
+
+
+<link rel="canonical" href="https://zecyel.gitee.io/Linux/%E6%97%A0U%E7%9B%98%E5%AE%89%E8%A3%85Ubuntu%E5%8F%8C%E7%B3%BB%E7%BB%9F/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zecyel.gitee.io/Linux/%E6%97%A0U%E7%9B%98%E5%AE%89%E8%A3%85Ubuntu%E5%8F%8C%E7%B3%BB%E7%BB%9F/","path":"Linux/无U盘安装Ubuntu双系统/","title":"无U盘安装Ubuntu双系统"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>无U盘安装Ubuntu双系统 | Active</title>
+  
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?5a09715bf437fdcf7e06d53a5b4e8106"></script>
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Active</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9C%80%E8%A6%81%E7%9A%84%E6%9D%90%E6%96%99"><span class="nav-number">1.</span> <span class="nav-text">需要的材料</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E6%AD%A5%E9%AA%A4"><span class="nav-number">2.</span> <span class="nav-text">操作步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%86%E5%A4%87%E9%95%9C%E5%83%8F%E6%96%87%E4%BB%B6"><span class="nav-number">2.1.</span> <span class="nav-text">准备镜像文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">2.2.</span> <span class="nav-text">修改配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E7%A3%81%E7%9B%98%E5%88%86%E5%8C%BA%E4%B8%BA%E4%B8%BB%E5%88%86%E5%8C%BA"><span class="nav-number">2.3.</span> <span class="nav-text">修改磁盘分区为主分区</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%95%E5%AF%BC%E8%BF%9B%E5%85%A5-neogrub"><span class="nav-number">2.4.</span> <span class="nav-text">引导进入 NeoGrub</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E7%B3%BB%E7%BB%9F"><span class="nav-number">2.5.</span> <span class="nav-text">安装系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E8%BE%91%E5%BC%95%E5%AF%BC%E8%8F%9C%E5%8D%95"><span class="nav-number">2.6.</span> <span class="nav-text">编辑引导菜单</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Zecyel</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3plY3llbA==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zecyel"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOnplY3llbEAxNjMuY29t" title="E-Mail → mailto:zecyel@163.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zecyel.gitee.io/Linux/%E6%97%A0U%E7%9B%98%E5%AE%89%E8%A3%85Ubuntu%E5%8F%8C%E7%B3%BB%E7%BB%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Zecyel">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Active">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="无U盘安装Ubuntu双系统 | Active">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          无U盘安装Ubuntu双系统
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-09-14 20:32:20 / 修改时间：20:58:29" itemprop="dateCreated datePublished" datetime="2022-09-14T20:32:20+08:00">2022-09-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.4k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>之前一直想要装一个<code>Ubuntu</code>的双系统，奈何没有U盘，于是就有了这次实践，也有了这篇博客来记录。</p>
+<span id="more"></span>
+<h2 id="需要的材料">需要的材料</h2>
+<ol type="1">
+<li>一台电脑（请确保有空余磁盘空间）</li>
+<li>ubuntu-18.04-desktop-amd64.iso（<code>Ubuntu</code>的镜像，当然别的版本也可以）</li>
+<li><code>EasyBCD</code></li>
+<li>可能会用到<code>DiskGenius</code></li>
+</ol>
+<h2 id="操作步骤">操作步骤</h2>
+<h3 id="准备镜像文件">准备镜像文件</h3>
+<p>把系统镜像放到一个硬盘的<strong>根目录</strong>下（这个硬盘不是最终的安装位置！），我放在了<code>C</code>盘</p>
+<p>然后打开这个镜像（比如用WinRAR之类的解压缩软件），找到<code>vmlinuz.efi</code>和<code>initrd.lz</code>同样放到根目录下</p>
+<p>打开<code>EasyBCD</code>，选择添加新条目，选<code>NeoGrub</code>，安装，之后点配置</p>
+<figure>
+<img src="https://xhfs0.ztytech.com/CA107011/727b0dd4b284444b95308bb4b40a9858.file" alt="NeoGrub 配置" /><figcaption aria-hidden="true">NeoGrub 配置</figcaption>
+</figure>
+<h3 id="修改配置文件">修改配置文件</h3>
+<p>配置文件大致如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">title Install Ubuntu</span><br><span class="line">root (hd0,0)</span><br><span class="line">kernel (hd0,0)/vmlinuz.efi boot=casper iso-scan/filename=/ubuntu-18.04-desktop-amd64.iso ro quiet splash locale=zh_CN.UTF-8 </span><br><span class="line">initrd (hd0,0)/initrd.lz</span><br></pre></td></tr></table></figure>
+<p>下面来一行一行解释这些东西：</p>
+<p><code>title Install Ubuntu</code> 就是待会儿安装界面上显示的选项的名称，<code>title</code>后内容随意</p>
+<p><code>root (hd0,0)</code>就是先指定一下那个<code>linux</code>的<code>iso</code>文件放在哪里</p>
+<p>雷区来了！关于<code>(hd0,0)</code>到底是什么：</p>
+<p>先放一张图：</p>
+<figure>
+<img src="https://xhfs5.ztytech.com/CA107011/adbfec86f916460aa297fa7835552b36.file" alt="磁盘管理显示的磁盘分区" /><figcaption aria-hidden="true"><code>磁盘管理</code>显示的磁盘分区</figcaption>
+</figure>
+<p>这张图中的C盘就是<code>(hd0,0)</code>，D盘是<code>hd(0,1)</code>，后面的一个<code>66.76G</code>的是我装<code>Ubuntu</code>的位置，<code>(hd0,2)</code></p>
+<p>依次类推，F盘就是<code>(hd1,1)</code></p>
+<p><code>kernel</code>和<code>initrd</code>两行就是指定内核和<code>vmlinuz.efi</code>、<code>initrd.lz</code>这两个文件的位置，不作解释</p>
+<p>这里填的<code>(hd0,0)</code>只是告诉<code>NeoGrub</code>镜像的位置，并不是最终安装的位置！</p>
+<p>填好了配置文件之后保存关闭即可</p>
+<p>然后就需要给<code>Ubuntu</code>的安装腾空间了，比如说我是把D盘压缩卷，然后压缩出来的空间删除即可，变成“未分配”即可</p>
+<h3 id="修改磁盘分区为主分区">修改磁盘分区为主分区</h3>
+<p>雷区2：如果这样操作后未分配区域是被绿色线包住的（即扩展分区），需要用<code>DiskGenius</code>转换为主分区，然后保存退出</p>
+<figure>
+<img src="https://xhfs3.ztytech.com/CA107011/c4029bac7630408ea41e69a9130c0a01.file" alt="DiskGenius 修改为主分区" /><figcaption aria-hidden="true">DiskGenius 修改为主分区</figcaption>
+</figure>
+<h3 id="引导进入-neogrub">引导进入 NeoGrub</h3>
+<p>重启，开机的时候选择<code>NeoGrub</code>：</p>
+<figure>
+<img src="https://xhfs2.ztytech.com/CA107011/682c14c08b294819bfc1ee48baa3e230.file" alt="开机引导界面" /><figcaption aria-hidden="true">开机引导界面</figcaption>
+</figure>
+<h3 id="安装系统">安装系统</h3>
+<p>进入Ubuntu后，<code>Ctrl + Alt + T</code>调出终端，执行<code>sudo umount -l /isodevice</code>（注意！这很重要！跳过这步就会一直一直安装装不完）</p>
+<p>打开桌面的安装程序</p>
+<p>选择其他，如果你不想使用<code>Ubuntu</code>的引导作为主引导的话</p>
+<figure>
+<img src="https://xhfs5.ztytech.com/CA107011/6faaa5c6cdec486ab690c8cbd070b554.file" alt="选择多系统共存" /><figcaption aria-hidden="true">选择多系统共存</figcaption>
+</figure>
+<p>创建一个分区</p>
+<figure>
+<img src="https://xhfs0.ztytech.com/CA107011/92ad12611a564e95a8413dd11736979d.file" alt="创建一个分区" /><figcaption aria-hidden="true">创建一个分区</figcaption>
+</figure>
+<p>选<code>Ext4</code>，挂载点选<code>/</code></p>
+<figure>
+<img src="https://xhfs5.ztytech.com/CA107011/f8841a61120c4299a8c731f1953bff4f.file" alt="选择挂载点" /><figcaption aria-hidden="true">选择挂载点</figcaption>
+</figure>
+<p>如果不想使用<code>Ubuntu</code>的<code>Grub</code>引导作为主引导的话，在最下面选择把启动引导器安装在你刚刚建出来的分区</p>
+<figure>
+<img src="https://xhfs4.ztytech.com/CA107011/ad8e3435d96c45f985e0ad9e7d178a8e.file" alt="安装启动引导" /><figcaption aria-hidden="true">安装启动引导</figcaption>
+</figure>
+<p>最后就是一些无脑安装和设置了，配置完后关机，再开机的时候你就会发现：</p>
+<figure>
+<img src="https://xhfs2.ztytech.com/CA107011/682c14c08b294819bfc1ee48baa3e230.file" alt="引导界面没有Ubuntu？" /><figcaption aria-hidden="true">引导界面没有Ubuntu？</figcaption>
+</figure>
+<p>没有<code>Ubuntu</code>的引导！（这很正常，因为还没有编辑过引导）</p>
+<h3 id="编辑引导菜单">编辑引导菜单</h3>
+<p>进入<code>Windows</code>，还是<code>EasyBCD</code>，选择编辑引导菜单，如图操作</p>
+<figure>
+<img src="https://xhfs4.ztytech.com/CA107011/7a57de8401aa4b1bbf65792bac0096cb.file" alt="添加一个 Ubuntu 的条目" /><figcaption aria-hidden="true">添加一个 Ubuntu 的条目</figcaption>
+</figure>
+<figure>
+<img src="https://xhfs0.ztytech.com/CA107011/7472fc19087348ea8bb6d570ade1cc56.file" alt="删除 NeoGrub 引导" /><figcaption aria-hidden="true">删除 NeoGrub 引导</figcaption>
+</figure>
+<p>保存，再重启就有<code>Ubuntu</code>的选项啦，打开后就可以进入<code>Ubuntu</code>的引导了</p>
+<figure>
+<img src="https://xhfs2.ztytech.com/CA107011/8e2bcd65948a4830985ead6432ab4f2b.file" alt="成功！" /><figcaption aria-hidden="true">成功！</figcaption>
+</figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Zecyel
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://zecyel.gitee.io/Linux/%E6%97%A0U%E7%9B%98%E5%AE%89%E8%A3%85Ubuntu%E5%8F%8C%E7%B3%BB%E7%BB%9F/" title="无U盘安装Ubuntu双系统">https://zecyel.gitee.io/Linux/无U盘安装Ubuntu双系统/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E5%8F%8C%E7%B3%BB%E7%BB%9F/" rel="tag"><i class="fa fa-tag"></i> 双系统</a>
+              <a href="/tags/Ubuntu/" rel="tag"><i class="fa fa-tag"></i> Ubuntu</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/%E9%AB%98%E4%B8%AD%E7%94%9F%E6%B4%BB/%E9%95%87%E6%B5%B7%E4%B8%AD%E5%AD%A6%E8%B5%8B/" rel="prev" title="镇海中学赋">
+                  <i class="fa fa-chevron-left"></i> 镇海中学赋
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zecyel</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">2k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">2 分钟</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9taXN0Lw==">NexT.Mist</span> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
